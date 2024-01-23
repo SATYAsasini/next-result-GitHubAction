@@ -1,0 +1,25 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Log in Into Docker Hub
+      run: docker login -u -t "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
+      
+    - name: Build and Push Docker Image
+      run: |
+        docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/nextresult-gitAction:latest"
+        docker push "${{ secrets.DOCKERHUB_USERNAME }}/nextresult-gitAction:latest"
+        
